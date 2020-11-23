@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SecretSanta.Services
 {
-    public class SecretSantaSession
+    public class SecretSantaRoom
     {
         public List<Gifter> Gifters { get; } = new List<Gifter>();
 

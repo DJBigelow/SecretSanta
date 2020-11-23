@@ -1,0 +1,15 @@
+﻿@model CreateRoomViewModel
+
+@{
+
+}
+
+<h1>Create Session</h1>
+<form asp-action="CreateRoom">
+    <div class="form-group">
+        <label>Enter a unique room code: </label>
+        <input asp-for="RoomCode" asp-action="CreateRoom" class="form-control"/>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>

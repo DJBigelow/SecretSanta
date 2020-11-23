@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using SecretSanta.Services;
+using SecretSanta.ViewModels;
 
 namespace SecretSanta.Controllers
 {
@@ -13,27 +15,73 @@ namespace SecretSanta.Controllers
     {
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        public IDictionary<string, SecretSantaRoom> Rooms { get; }
+
+        public HomeController(ILogger<HomeController> logger, Dictionary<string, SecretSantaRoom> rooms)
         {
             _logger = logger;
+            Rooms = rooms;
         }
+
+
 
         public IActionResult Index()
         {
             return View();
         }
 
-        public IActionResult CreateSession()
+
+
+        public IActionResult CreateRoom()
         {
             return View();
         }
 
-        public IActionResult JoinSession()
+        [HttpPost]
+        public IActionResult CreateRoom(CreateRoomViewModel vm)
+        {
+            if (Rooms.ContainsKey(vm.RoomCode))
+            {
+                return View();
+            }
+
+            SecretSantaRoom newRoom = new SecretSantaRoom();
+
+            Rooms.Add(vm.RoomCode, newRoom);
+
+            return View(nameof(EnterName), new EnterNameViewModel(vm.RoomCode));
+        }
+
+
+
+
+        public IActionResult EnterName(EnterNameViewModel vm)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(vm);
+            }
+
+            Gifter newGifter = new Gifter(vm.GifterName);
+            Rooms[vm.RoomCode].Gifters.Add(newGifter);
+
+            return View(nameof(Room), Rooms[vm.RoomCode]);
+        }
+
+
+
+        public IActionResult JoinRoom()
         {
             return View();
         }
 
-        public IActionResult Session()
+        public IActionResult JoinRoom(string roomCode)
+        {
+            return View(nameof(Room), roomCode);
+        }
+
+
+        public IActionResult Room()
         {
             return View();
         }

@@ -5,14 +5,14 @@ using SecretSanta.Models;
 
 namespace SecretSanta.Test
 {
-    public class SecretSantaSessionTests
+    public class SecretSantaRoomTests
     {
-        private SecretSantaSession session;
+        private SecretSantaRoom session;
 
         [SetUp]
         public void Setup()
         {
-            session = new SecretSantaSession();
+            session = new SecretSantaRoom();
         }
 
 
