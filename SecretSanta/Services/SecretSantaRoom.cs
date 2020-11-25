@@ -11,15 +11,23 @@ namespace SecretSanta.Services
     {
         public List<Gifter> Gifters { get; } = new List<Gifter>();
 
+        private bool recipientsAssigned = false;
+
         public void AssignSecretSantas()
         {
-            Gifters.Shuffle();
-
-            for(int i = 0; i < Gifters.Count; ++i)
+            if (!recipientsAssigned)
             {
-                //Wrap around list like circular array
-                Guid gifteeId = Gifters[(i + 1) % Gifters.Count].ID;
-                Gifters[i].AssignedGifteeID = gifteeId;
+                recipientsAssigned = true;
+
+                Gifters.Shuffle();
+
+                for(int i = 0; i < Gifters.Count; ++i)
+                {
+                    //Wrap around list like circular array
+                    string recipentName = Gifters[(i + 1) % Gifters.Count].Name;
+                    Gifters[i].RecipientName = recipentName;
+                }
+
             }
         }
     }

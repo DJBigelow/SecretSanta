@@ -8,6 +8,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using SecretSanta.Services;
 using SecretSanta.ViewModels;
+using System.Collections.Concurrent;
+using Microsoft.AspNetCore.Http;
 
 namespace SecretSanta.Controllers
 {
@@ -17,7 +19,7 @@ namespace SecretSanta.Controllers
 
         public IDictionary<string, SecretSantaRoom> Rooms { get; }
 
-        public HomeController(ILogger<HomeController> logger, Dictionary<string, SecretSantaRoom> rooms)
+        public HomeController(ILogger<HomeController> logger, IDictionary<string, SecretSantaRoom> rooms)
         {
             _logger = logger;
             Rooms = rooms;
@@ -40,21 +42,20 @@ namespace SecretSanta.Controllers
         [HttpPost]
         public IActionResult CreateRoom(CreateRoomViewModel vm)
         {
-            if (Rooms.ContainsKey(vm.RoomCode))
+            var newRoom = new SecretSantaRoom();
+
+            if (Rooms.TryAdd(vm.RoomCode, newRoom))
             {
-                return View();
+                return View(nameof(EnterName), new EnterNameViewModel { RoomCode = vm.RoomCode });
             }
 
-            SecretSantaRoom newRoom = new SecretSantaRoom();
+            return View();
 
-            Rooms.Add(vm.RoomCode, newRoom);
-
-            return View(nameof(EnterName), new EnterNameViewModel(vm.RoomCode));
         }
 
 
 
-
+        [HttpPost]
         public IActionResult EnterName(EnterNameViewModel vm)
         {
             if (!ModelState.IsValid)
@@ -62,22 +63,32 @@ namespace SecretSanta.Controllers
                 return View(vm);
             }
 
-            Gifter newGifter = new Gifter(vm.GifterName);
+
+
+            Gifter newGifter = new Gifter(HttpContext.Session.Id, vm.GifterName);
+            HttpContext.Session.SetString("UserID", newGifter.ID);
+
             Rooms[vm.RoomCode].Gifters.Add(newGifter);
 
-            return View(nameof(Room), Rooms[vm.RoomCode]);
+            return View(nameof(Room), new RoomViewModel(Rooms[vm.RoomCode], vm.RoomCode));
         }
 
 
 
+        [HttpGet]
         public IActionResult JoinRoom()
         {
             return View();
         }
 
-        public IActionResult JoinRoom(string roomCode)
+        [HttpPost]
+        public IActionResult JoinRoom(JoinRoomViewModel vm)
         {
-            return View(nameof(Room), roomCode);
+            if (Rooms.ContainsKey(vm.RoomCode))
+            {
+                return View(nameof(EnterName), new EnterNameViewModel { RoomCode = vm.RoomCode });
+            }
+            return View(vm);
         }
 
 
@@ -86,10 +97,21 @@ namespace SecretSanta.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
-        {
-            return View();
+
+        [HttpGet]
+        public IActionResult Recipient(string roomID)
+        { 
+            var room = Rooms[roomID];
+            room.AssignSecretSantas();
+
+            var gifter = room.Gifters.FirstOrDefault(g => g.ID == HttpContext.Session.GetString("UserID"));
+
+            return View(new RecipientViewModel(gifter.RecipientName));
         }
+
+
+
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

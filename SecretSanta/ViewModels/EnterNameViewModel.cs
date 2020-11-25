@@ -8,14 +8,11 @@ namespace SecretSanta.ViewModels
 {
     public class EnterNameViewModel
     {
-        public string RoomCode { get; }
+        public string RoomCode { get; set; }
 
         [Required]
         public string GifterName { get; set; }
 
-        public EnterNameViewModel(string roomCode)
-        {
-            RoomCode = roomCode;
-        }
+        
     }
 }

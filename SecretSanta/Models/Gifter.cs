@@ -5,17 +5,17 @@ using System.Threading.Tasks;
 
 namespace SecretSanta.Models
 {
-    public class Gifter
+    public class Gifter 
     {
-        public Guid ID { get; }
+        public string ID { get; }
 
         public string Name { get; }
 
-        public Guid AssignedGifteeID { get; set; }
+        public string RecipientName { get; set; }
 
-        public Gifter(string name)
+        public Gifter(string id, string name )
         {
-            ID = Guid.NewGuid();
+            ID = id;
             Name = name;
         }
     }

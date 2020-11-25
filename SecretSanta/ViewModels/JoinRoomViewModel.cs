@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 
 namespace SecretSanta.ViewModels
 {
-    public class CreateRoomViewModel
+    public class JoinRoomViewModel
     {
         [Required]
         public string RoomCode { get; set; }
+
+        public bool RoomExists { get; set; }
     }
 }
