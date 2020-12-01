@@ -1,0 +1,27 @@
+﻿body {
+    background-color: #CC231E;
+    color: #FFF;
+    font-family: Lato;
+    font-weight: 700;
+    font-size: 30px;
+}
+
+a {
+    color: #FFF;
+}
+
+    a:hover {
+        color: #34A65F
+    }
+
+
+.btn-primary {
+    color: #fff;
+    background-color: #34A65F;
+    border-color: #34A65F;
+}
+
+    .btn-primary:hover, .btn-primary:active, .btn-primary:focus {
+        background-color: #0F8A5F;
+        border-color: #34A65F;
+    }

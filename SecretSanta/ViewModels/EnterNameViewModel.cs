@@ -10,9 +10,8 @@ namespace SecretSanta.ViewModels
     {
         public string RoomCode { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Please enter your name")]
         public string GifterName { get; set; }
 
-        
     }
 }

@@ -2,11 +2,16 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <div>
-        <a asp-action="CreateRoom">Start a Session</a>
+<head>
+    <link rel="stylesheet" href="~/css/christmas.css" />
+</head>
+<body>
+    <div class="text-center">
+        <div>
+            <a asp-action="CreateRoom">Create a Room</a>
+        </div>
+        <div>
+            <a asp-action="JoinRoom">Join a Room</a>
+        </div>
     </div>
-    <div>
-        <a asp-action="JoinRoom">Join a Session</a>
-    </div>
-</div>
+</body>

@@ -42,14 +42,23 @@ namespace SecretSanta.Controllers
         [HttpPost]
         public IActionResult CreateRoom(CreateRoomViewModel vm)
         {
-            var newRoom = new SecretSantaRoom();
-
-            if (Rooms.TryAdd(vm.RoomCode, newRoom))
+            if(!ModelState.IsValid)
             {
-                return View(nameof(EnterName), new EnterNameViewModel { RoomCode = vm.RoomCode });
+                return View();
+            }
+            else
+            {
+                var newRoom = new SecretSantaRoom();
+
+                if (Rooms.TryAdd(vm.RoomCode, newRoom))
+                {
+                    return View(nameof(EnterName), new EnterNameViewModel { RoomCode = vm.RoomCode });
+                }
+
+                ModelState.AddModelError("RoomExists", "Room already exists");
+                return View();
             }
 
-            return View();
 
         }
 
@@ -64,9 +73,8 @@ namespace SecretSanta.Controllers
             }
 
 
-
-            Gifter newGifter = new Gifter(HttpContext.Session.Id, vm.GifterName);
-            HttpContext.Session.SetString("UserID", newGifter.ID);
+            Gifter newGifter = new Gifter(Guid.NewGuid(), vm.GifterName);
+            HttpContext.Session.SetString("UserID", newGifter.ID.ToString());
 
             Rooms[vm.RoomCode].Gifters.Add(newGifter);
 
@@ -84,11 +92,20 @@ namespace SecretSanta.Controllers
         [HttpPost]
         public IActionResult JoinRoom(JoinRoomViewModel vm)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(vm);
+            }
+
             if (Rooms.ContainsKey(vm.RoomCode))
             {
                 return View(nameof(EnterName), new EnterNameViewModel { RoomCode = vm.RoomCode });
             }
-            return View(vm);
+            else
+            {
+                ModelState.AddModelError("RoomDoesNotExist", "Room does not exist");
+                return View(vm);
+            }
         }
 
 
@@ -104,7 +121,7 @@ namespace SecretSanta.Controllers
             var room = Rooms[roomID];
             room.AssignSecretSantas();
 
-            var gifter = room.Gifters.FirstOrDefault(g => g.ID == HttpContext.Session.GetString("UserID"));
+            var gifter = room.Gifters.FirstOrDefault(g => g.ID.ToString() == HttpContext.Session.GetString("UserID"));
 
             return View(new RecipientViewModel(gifter.RecipientName));
         }

@@ -5,14 +5,19 @@
 *@
 @{
 }
+<head>
+    <link rel="stylesheet" href="~/css/InputError.css" />
+    <link rel="stylesheet" href="~/css/christmas.css" />
+</head>
+<body>
+    <h1>People in the room:</h1>
 
-<h1>People in the room:</h1>
+    <ul>
+        @foreach(Gifter gifter in Model.Room.Gifters)
+        {
+            <li>@gifter.Name</li>
+        }
+    </ul>
 
-<ul>
-    @foreach(Gifter gifter in Model.Room.Gifters)
-    {
-        <li>@gifter.Name</li>
-    }
-</ul>
-
-<a asp-action="Recipient" asp-route-roomID="@Model.RoomCode">Get your Secret Santa recipient</a>
+    <a asp-action="Recipient" asp-route-roomID="@Model.RoomCode">Get your Secret Santa recipient</a>
+</body>

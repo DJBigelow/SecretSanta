@@ -7,13 +7,13 @@ namespace SecretSanta.Models
 {
     public class Gifter 
     {
-        public string ID { get; }
+        public Guid ID { get; }
 
         public string Name { get; }
 
         public string RecipientName { get; set; }
 
-        public Gifter(string id, string name )
+        public Gifter(Guid id, string name )
         {
             ID = id;
             Name = name;

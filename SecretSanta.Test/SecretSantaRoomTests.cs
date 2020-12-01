@@ -22,7 +22,7 @@ namespace SecretSanta.Test
         {
             for (int i = 0; i < 5; ++i)
             {
-                session.Gifters.Add(new Gifter(i.ToString(), i.ToString()));
+                session.Gifters.Add(new Gifter(Guid.NewGuid(), i.ToString()));
             }
 
             session.AssignSecretSantas();
@@ -39,7 +39,7 @@ namespace SecretSanta.Test
         {
             for (int i = 0; i < 5; ++i)
             {
-                session.Gifters.Add(new Gifter(i.ToString(), ""));
+                session.Gifters.Add(new Gifter(Guid.NewGuid(), ""));
             }
 
             session.AssignSecretSantas();

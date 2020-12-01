@@ -8,9 +8,7 @@ namespace SecretSanta.ViewModels
 {
     public class JoinRoomViewModel
     {
-        [Required]
+        [Required(ErrorMessage = "Please enter a room code")]
         public string RoomCode { get; set; }
-
-        public bool RoomExists { get; set; }
     }
 }
