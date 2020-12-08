@@ -1,6 +1,5 @@
 using System;
 using NUnit.Framework;
-using SecretSanta.Services;
 using SecretSanta.Models;
 using System.Collections.Generic;
 
@@ -8,12 +7,12 @@ namespace SecretSanta.Test
 {
     public class SecretSantaRoomTests
     {
-        private SecretSantaRoom session;
+        private SecretSantaRoom room;
 
         [SetUp]
         public void Setup()
         {
-            session = new SecretSantaRoom();
+            room = new SecretSantaRoom();
         }
 
 
@@ -22,12 +21,12 @@ namespace SecretSanta.Test
         {
             for (int i = 0; i < 5; ++i)
             {
-                session.Gifters.Add(new Gifter(Guid.NewGuid(), i.ToString()));
+                room.Gifters.Add(new Gifter(Guid.NewGuid(), i.ToString()));
             }
 
-            session.AssignSecretSantas();
+            room.AssignSecretSantas();
 
-            foreach(Gifter gifter in session.Gifters)
+            foreach(Gifter gifter in room.Gifters)
             {
                 //This doesn't necessarily prove that a gifter can't be assigned themselves, but it doesn't hurt to add it in
                 Assert.That(gifter.RecipientName != null && gifter.RecipientName != gifter.Name);
@@ -39,25 +38,25 @@ namespace SecretSanta.Test
         {
             for (int i = 0; i < 5; ++i)
             {
-                session.Gifters.Add(new Gifter(Guid.NewGuid(), ""));
+                room.Gifters.Add(new Gifter(Guid.NewGuid(), ""));
             }
 
-            session.AssignSecretSantas();
+            room.AssignSecretSantas();
 
 
             var originalGiftersList = new List<Gifter>();
 
-            foreach(Gifter gifter in session.Gifters)
+            foreach(Gifter gifter in room.Gifters)
             {
                 originalGiftersList.Add(gifter);
             }
 
 
-            session.AssignSecretSantas();
+            room.AssignSecretSantas();
 
-            for (int i = 0; i < session.Gifters.Count; ++i)
+            for (int i = 0; i < room.Gifters.Count; ++i)
             {
-                Assert.AreEqual(originalGiftersList[i].ID, session.Gifters[i].ID);
+                Assert.AreEqual(originalGiftersList[i].ID, room.Gifters[i].ID);
             }
 
         }

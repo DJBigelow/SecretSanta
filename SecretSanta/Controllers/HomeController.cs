@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using SecretSanta.Services;
 using SecretSanta.ViewModels;
 using System.Collections.Concurrent;
 using Microsoft.AspNetCore.Http;
@@ -21,7 +20,6 @@ namespace SecretSanta.Controllers
 
         public HomeController(ILogger<HomeController> logger, IDictionary<string, SecretSantaRoom> rooms)
         {
-            _logger = logger;
             Rooms = rooms;
         }
 
@@ -33,7 +31,7 @@ namespace SecretSanta.Controllers
         }
 
 
-
+        [HttpGet]
         public IActionResult CreateRoom()
         {
             return View();
@@ -78,7 +76,7 @@ namespace SecretSanta.Controllers
 
             Rooms[vm.RoomCode].Gifters.Add(newGifter);
 
-            return View(nameof(Room), new RoomViewModel(Rooms[vm.RoomCode], vm.RoomCode));
+            return RedirectToAction(nameof(Room),  new { roomCode = vm.RoomCode });
         }
 
 
@@ -108,10 +106,10 @@ namespace SecretSanta.Controllers
             }
         }
 
-
-        public IActionResult Room()
+        [HttpGet]
+        public IActionResult Room(string roomCode)
         {
-            return View();
+            return View(new RoomViewModel(Rooms[roomCode], roomCode));
         }
 
 

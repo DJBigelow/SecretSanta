@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SecretSanta.Services
+namespace SecretSanta.Models
 {
     public class SecretSantaRoom
     {
@@ -27,7 +27,6 @@ namespace SecretSanta.Services
                     string recipentName = Gifters[(i + 1) % Gifters.Count].Name;
                     Gifters[i].RecipientName = recipentName;
                 }
-
             }
         }
     }
